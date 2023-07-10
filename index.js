@@ -1,11 +1,23 @@
-const { Client, Events, GatewayIntentBits } = require("discord.js");
+/* eslint-disable no-console */
+const { Client, GatewayIntentBits, Partials } = require("discord.js");
+
 require("dotenv").config();
-const discord_token = process.env.discord_token;
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const { DiscordToken } = process.env;
 
-client.once(Events.ClientReady, (c) => {
-  console.log(`Ready! Logged in as ${c.user.tag}`);
+const client = new Client({
+  intents: [
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMessageReactions,
+    GatewayIntentBits.DirectMessageReactions,
+  ], // eslint-disable-line max-len
+  partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
-client.login(discord_token);
+client.on("ready", () => {
+  console.log(`Logged in as ${client.user.tag}!`);
+});
+
+client.login(DiscordToken);
