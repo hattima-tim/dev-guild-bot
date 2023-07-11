@@ -1,3 +1,4 @@
+const http = require("http");
 /* eslint-disable no-console */
 const { Client, GatewayIntentBits, Partials } = require("discord.js");
 
@@ -30,6 +31,18 @@ eventFiles.forEach((file) => {
   const event = require(filePath);
 
   client.on(event.name, (...args) => event.execute(...args, client));
+});
+
+const port = 3000;
+
+const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.setHeader("Content-Type", "text/plain");
+  res.end("Hello World\n");
+});
+
+server.listen(port, () => {
+  console.log(`Server running at port: ${port}/`);
 });
 
 client.login(DiscordToken);
